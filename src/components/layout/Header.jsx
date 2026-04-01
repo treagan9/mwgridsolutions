@@ -4,12 +4,12 @@ import {
   Box,
   Container,
   Flex,
-  Heading,
   Button,
   IconButton,
   VStack,
   HStack,
   Text,
+  Image,
   Link as ChakraLink
 } from '@chakra-ui/react'
 import { HiMenu, HiX } from 'react-icons/hi'
@@ -45,32 +45,32 @@ function Header() {
       left={0}
       right={0}
       zIndex={100}
-      bg={scrolled ? 'rgba(10, 15, 26, 0.92)' : 'transparent'}
-      backdropFilter={scrolled ? 'blur(12px)' : 'none'}
-      borderBottom={scrolled ? '1px solid' : '1px solid transparent'}
+      bg={scrolled ? 'rgba(8, 12, 22, 0.95)' : 'transparent'}
+      backdropFilter={scrolled ? 'blur(16px) saturate(1.2)' : 'none'}
+      borderBottom="1px solid"
       borderColor={scrolled ? 'brand.border' : 'transparent'}
-      transition="all 0.3s"
+      transition="all 0.35s cubic-bezier(0.4, 0, 0.2, 1)"
     >
       <Container maxW="1200px" px={{ base: 5, md: 8 }}>
-        <Flex h="72px" align="center" justify="space-between">
-          <HStack spacing={2} cursor="pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <Box
-              w={8}
-              h={8}
-              bg="brand.accent"
-              borderRadius="lg"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Text fontSize="sm" fontWeight="800" color="white">PE</Text>
-            </Box>
-            <Heading as="h1" fontSize="md" fontWeight="700" letterSpacing="-0.01em">
-              Power Equipment Buyers
-            </Heading>
-          </HStack>
+        <Flex h={{ base: '68px', md: '76px' }} align="center" justify="space-between">
 
-          <HStack spacing={8} display={{ base: 'none', md: 'flex' }}>
+          {/* Logo */}
+          <Flex
+            align="center"
+            cursor="pointer"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            flexShrink={0}
+          >
+            <Image
+              src="/logo-wide-transparent-background.png"
+              alt="Power Equipment Buyers"
+              h={{ base: '32px', md: '38px' }}
+              objectFit="contain"
+            />
+          </Flex>
+
+          {/* Desktop Nav */}
+          <HStack spacing={1} display={{ base: 'none', md: 'flex' }}>
             {NAV_ITEMS.map((item) => (
               <ChakraLink
                 key={item.href}
@@ -78,9 +78,15 @@ function Header() {
                 fontSize="sm"
                 fontWeight="500"
                 color="brand.textSecondary"
-                _hover={{ color: 'brand.text' }}
+                px={4}
+                py={2}
+                borderRadius="lg"
+                _hover={{
+                  color: 'brand.text',
+                  bg: 'whiteAlpha.50'
+                }}
                 cursor="pointer"
-                transition="color 0.2s"
+                transition="all 0.2s"
               >
                 {item.label}
               </ChakraLink>
@@ -88,12 +94,16 @@ function Header() {
             <Button
               variant="primary"
               size="sm"
+              ml={3}
               onClick={() => handleNavClick('#contact')}
+              fontFamily="heading"
+              letterSpacing="-0.01em"
             >
               Get an Offer
             </Button>
           </HStack>
 
+          {/* Mobile Toggle */}
           <IconButton
             display={{ base: 'flex', md: 'none' }}
             aria-label="Toggle menu"
@@ -101,39 +111,48 @@ function Header() {
             variant="ghost"
             color="brand.text"
             onClick={() => setMobileOpen(!mobileOpen)}
+            _hover={{ bg: 'whiteAlpha.100' }}
           />
         </Flex>
 
+        {/* Mobile Menu */}
         {mobileOpen && (
-          <VStack
-            display={{ base: 'flex', md: 'none' }}
+          <Box
+            display={{ base: 'block', md: 'none' }}
             pb={6}
-            spacing={4}
-            align="stretch"
+            borderTop="1px solid"
+            borderColor="brand.border"
+            mt={-1}
           >
-            {NAV_ITEMS.map((item) => (
-              <ChakraLink
-                key={item.href}
-                onClick={() => handleNavClick(item.href)}
-                fontSize="md"
-                fontWeight="500"
-                color="brand.textSecondary"
-                _hover={{ color: 'brand.text' }}
-                cursor="pointer"
-                py={2}
+            <VStack spacing={1} align="stretch" pt={4}>
+              {NAV_ITEMS.map((item) => (
+                <ChakraLink
+                  key={item.href}
+                  onClick={() => handleNavClick(item.href)}
+                  fontSize="md"
+                  fontWeight="500"
+                  color="brand.textSecondary"
+                  _hover={{ color: 'brand.text', bg: 'whiteAlpha.50' }}
+                  cursor="pointer"
+                  py={3}
+                  px={4}
+                  borderRadius="lg"
+                >
+                  {item.label}
+                </ChakraLink>
+              ))}
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={() => handleNavClick('#contact')}
+                w="full"
+                mt={2}
+                fontFamily="heading"
               >
-                {item.label}
-              </ChakraLink>
-            ))}
-            <Button
-              variant="primary"
-              size="md"
-              onClick={() => handleNavClick('#contact')}
-              w="full"
-            >
-              Get an Offer
-            </Button>
-          </VStack>
+                Get an Offer
+              </Button>
+            </VStack>
+          </Box>
         )}
       </Container>
     </Box>

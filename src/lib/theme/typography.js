@@ -1,12 +1,12 @@
 // src/lib/theme/typography.js
 
-// Space Grotesk — geometric, technical feel for headings
-// Inter — clean, highly legible for body text
+// Syne — bold geometric display face with engineered personality
+// Outfit — clean, modern geometric sans for body text
 // Both loaded via Google Fonts in index.html
 
 export const fonts = {
-  heading: "'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-  body: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  heading: "'Syne', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  body: "'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
   mono: "'JetBrains Mono', 'Fira Code', monospace"
 }
 
@@ -14,14 +14,14 @@ export const textStyles = {
   heroTitle: {
     fontSize: { base: '3xl', md: '5xl', lg: '6xl' },
     fontWeight: '800',
-    lineHeight: '1.08',
+    lineHeight: '1.06',
     letterSpacing: '-0.03em',
     fontFamily: 'heading'
   },
   sectionTitle: {
     fontSize: { base: '2xl', md: '4xl' },
     fontWeight: '700',
-    lineHeight: '1.15',
+    lineHeight: '1.12',
     letterSpacing: '-0.02em',
     fontFamily: 'heading'
   },
@@ -35,7 +35,7 @@ export const textStyles = {
     fontSize: 'xs',
     fontWeight: '700',
     textTransform: 'uppercase',
-    letterSpacing: '0.12em',
+    letterSpacing: '0.14em',
     color: 'brand.accent'
   },
   body: {

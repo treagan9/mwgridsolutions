@@ -3,24 +3,26 @@ import { Box, Heading, Text } from '@chakra-ui/react'
 
 function SectionHeading({ label, title, subtitle }) {
   return (
-    <Box textAlign="center" mb={12}>
+    <Box textAlign="center" mb={{ base: 10, md: 14 }}>
       {label && (
         <Text
-          fontSize="sm"
+          fontSize="xs"
           fontWeight="700"
           textTransform="uppercase"
-          letterSpacing="0.1em"
+          letterSpacing="0.14em"
           color="brand.accent"
-          mb={3}
+          mb={4}
         >
           {label}
         </Text>
       )}
       <Heading
         as="h2"
+        fontFamily="heading"
         fontSize={{ base: '2xl', md: '4xl' }}
-        fontWeight="800"
-        lineHeight="1.2"
+        fontWeight="700"
+        lineHeight="1.12"
+        letterSpacing="-0.02em"
         mb={4}
       >
         {title}
@@ -29,8 +31,9 @@ function SectionHeading({ label, title, subtitle }) {
         <Text
           fontSize={{ base: 'md', md: 'lg' }}
           color="brand.textSecondary"
-          maxW="640px"
+          maxW="620px"
           mx="auto"
+          lineHeight="1.7"
         >
           {subtitle}
         </Text>
