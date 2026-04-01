@@ -15,7 +15,7 @@ function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <Box as="footer" bg="brand.gray50" borderTop="1px solid" borderColor="brand.gray200">
+    <Box as="footer" bg="brand.gray950" borderTop="1px solid" borderColor="brand.darkBorder">
       <Container maxW="1200px" px={{ base: 5, md: 8 }} py={10}>
         <Flex
           direction={{ base: 'column', md: 'row' }}
@@ -29,10 +29,11 @@ function Footer() {
               alt="Power Equipment Buyers"
               h="30px"
               objectFit="contain"
+              filter="brightness(0) invert(1)"
             />
             <Text
               fontSize="sm"
-              color="brand.gray500"
+              color="brand.gray400"
               maxW="320px"
               textAlign={{ base: 'center', md: 'left' }}
               lineHeight="1.7"
@@ -48,22 +49,22 @@ function Footer() {
               fontWeight="700"
               textTransform="uppercase"
               letterSpacing="0.1em"
-              color="brand.accent"
+              color="brand.accentLight"
             >
               Contact
             </Text>
             <ChakraLink
               href="mailto:info@powerequipmentbuyers.com"
               fontSize="sm"
-              color="brand.gray500"
-              _hover={{ color: 'brand.accent' }}
+              color="brand.gray400"
+              _hover={{ color: 'white' }}
             >
               info@powerequipmentbuyers.com
             </ChakraLink>
           </VStack>
         </Flex>
 
-        <Divider borderColor="brand.gray200" my={6} />
+        <Divider borderColor="brand.darkBorder" my={6} />
 
         <Flex
           direction={{ base: 'column', md: 'row' }}
@@ -71,14 +72,14 @@ function Footer() {
           align="center"
           gap={3}
         >
-          <Text fontSize="xs" color="brand.gray400">
+          <Text fontSize="xs" color="brand.gray500">
             {year} Power Equipment Buyers. All rights reserved.
           </Text>
           <HStack spacing={5}>
-            <ChakraLink fontSize="xs" color="brand.gray400" _hover={{ color: 'brand.gray600' }} href="#">
+            <ChakraLink fontSize="xs" color="brand.gray500" _hover={{ color: 'brand.gray300' }} href="#">
               Privacy Policy
             </ChakraLink>
-            <ChakraLink fontSize="xs" color="brand.gray400" _hover={{ color: 'brand.gray600' }} href="#">
+            <ChakraLink fontSize="xs" color="brand.gray500" _hover={{ color: 'brand.gray300' }} href="#">
               Terms of Service
             </ChakraLink>
           </HStack>
