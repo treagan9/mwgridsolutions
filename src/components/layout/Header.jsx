@@ -21,12 +21,16 @@ const NAV_ITEMS = [
   { label: 'Contact', href: '/contact/', isRoute: true }
 ]
 
+// Pages that have a dark hero image background
+const DARK_HERO_PAGES = ['/', '/contact/']
+
 function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const isHome = location.pathname === '/'
+  const hasDarkHero = DARK_HERO_PAGES.includes(location.pathname)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -57,9 +61,7 @@ function Header() {
     return true
   })
 
-  // On home page: transparent header over hero image, white on scroll
-  // On other pages: always white
-  const isTransparent = isHome && !scrolled && !mobileOpen
+  const isTransparent = hasDarkHero && !scrolled && !mobileOpen
 
   return (
     <Box
