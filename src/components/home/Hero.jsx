@@ -1,6 +1,6 @@
 // src/components/home/Hero.jsx
 import { Box, Container, Heading, Text, Button, Flex, HStack, Icon } from '@chakra-ui/react'
-import { HiArrowRight, HiGlobe } from 'react-icons/hi'
+import { HiGlobe } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
 function Hero() {
@@ -16,7 +16,6 @@ function Hero() {
       display="flex"
       alignItems="center"
     >
-      {/* Background image */}
       <Box
         position="absolute"
         inset={0}
@@ -26,14 +25,12 @@ function Hero() {
         backgroundRepeat="no-repeat"
       />
 
-      {/* Dark gradient overlay */}
       <Box
         position="absolute"
         inset={0}
         bg="linear-gradient(135deg, rgba(8, 12, 22, 0.92) 0%, rgba(8, 12, 22, 0.75) 50%, rgba(8, 12, 22, 0.6) 100%)"
       />
 
-      {/* Bottom fade to white (smooth transition to next section) */}
       <Box
         position="absolute"
         bottom={0}
@@ -47,7 +44,6 @@ function Hero() {
       <Container maxW="1200px" px={{ base: 5, md: 8 }} position="relative">
         <Box maxW="680px">
 
-          {/* Nationwide badge */}
           <HStack
             spacing={2}
             bg="whiteAlpha.100"
@@ -60,11 +56,22 @@ function Hero() {
             w="fit-content"
             backdropFilter="blur(8px)"
           >
-            <Icon as={HiGlobe} boxSize={3.5} color="brand.accentLight" />
+            <Icon as={HiGlobe} boxSize={3.5} color="brand.tealLight" />
             <Text fontSize="11px" fontWeight="600" color="whiteAlpha.900" letterSpacing="0.01em">
               Serving all 50 states
             </Text>
           </HStack>
+
+          <Text
+            fontSize="11px"
+            fontWeight="700"
+            textTransform="uppercase"
+            letterSpacing="0.1em"
+            color="brand.tealLight"
+            mb={4}
+          >
+            Direct Buyer of Power Equipment
+          </Text>
 
           <Heading
             as="h2"
@@ -98,7 +105,6 @@ function Hero() {
               bg="white"
               color="brand.accent"
               size="lg"
-              
               onClick={() => navigate('/contact/')}
               px={7}
               fontFamily="heading"

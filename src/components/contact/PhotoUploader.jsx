@@ -7,9 +7,10 @@ import {
   Icon,
   Image,
   IconButton,
-  SimpleGrid
+  SimpleGrid,
+  HStack
 } from '@chakra-ui/react'
-import { HiPhotograph, HiX } from 'react-icons/hi'
+import { HiOutlinePhotograph, HiOutlinePlus, HiX } from 'react-icons/hi'
 
 const MAX_PHOTOS = 5
 const ACCEPTED = 'image/jpeg,image/png,image/webp,image/heic'
@@ -39,69 +40,74 @@ function PhotoUploader({ photos, setPhotos }) {
         style={{ display: 'none' }}
       />
 
-      {photos.length > 0 && (
-        <SimpleGrid columns={{ base: 3, md: 5 }} spacing={3} mb={4}>
-          {photos.map((file, i) => (
-            <Box
-              key={i}
-              position="relative"
-              borderRadius="lg"
-              overflow="hidden"
-              border="1px solid"
-              borderColor="brand.gray200"
-            >
-              <Image
-                src={URL.createObjectURL(file)}
-                alt={`Upload ${i + 1}`}
-                w="full"
-                h="80px"
-                objectFit="cover"
-              />
-              <IconButton
-                aria-label="Remove photo"
-                icon={<HiX />}
-                size="xs"
-                position="absolute"
-                top={1}
-                right={1}
-                bg="blackAlpha.600"
-                color="white"
-                borderRadius="full"
-                _hover={{ bg: 'red.500' }}
-                onClick={() => removePhoto(i)}
-              />
-            </Box>
-          ))}
-        </SimpleGrid>
-      )}
+      <SimpleGrid columns={{ base: 3, md: 5 }} spacing={3}>
+        {/* Rendered photo thumbnails */}
+        {photos.map((file, i) => (
+          <Box
+            key={i}
+            position="relative"
+            borderRadius="xl"
+            overflow="hidden"
+            border="2px solid"
+            borderColor="brand.gray200"
+            aspectRatio="1"
+          >
+            <Image
+              src={URL.createObjectURL(file)}
+              alt={`Upload ${i + 1}`}
+              w="full"
+              h="full"
+              objectFit="cover"
+            />
+            <IconButton
+              aria-label="Remove photo"
+              icon={<HiX size={12} />}
+              size="xs"
+              position="absolute"
+              top={1.5}
+              right={1.5}
+              bg="blackAlpha.700"
+              color="white"
+              borderRadius="full"
+              minW="20px"
+              h="20px"
+              _hover={{ bg: 'red.500' }}
+              onClick={() => removePhoto(i)}
+            />
+          </Box>
+        ))}
 
-      {photos.length < MAX_PHOTOS && (
-        <Flex
-          border="1.5px dashed"
-          borderColor="brand.gray300"
-          borderRadius="xl"
-          p={8}
-          direction="column"
-          align="center"
-          justify="center"
-          cursor="pointer"
-          bg="brand.gray50"
-          transition="all 0.15s"
-          _hover={{
-            borderColor: 'brand.accent',
-            bg: 'brand.accentSoft'
-          }}
-          onClick={() => inputRef.current?.click()}
-        >
-          <Icon as={HiPhotograph} boxSize={7} color="brand.gray400" mb={2} />
-          <Text fontSize="sm" fontWeight="600" color="brand.gray600">
-            Upload equipment photos
-          </Text>
-          <Text fontSize="xs" color="brand.gray400" mt={1}>
-            Nameplate, overall condition, details
-          </Text>
-        </Flex>
-      )}
+        {/* Add photo button (always visible if under max) */}
+        {photos.length < MAX_PHOTOS && (
+          <Flex
+            border="2px dashed"
+            borderColor="brand.gray200"
+            borderRadius="xl"
+            direction="column"
+            align="center"
+            justify="center"
+            cursor="pointer"
+            aspectRatio="1"
+            transition="all 0.15s"
+            _hover={{
+              borderColor: 'brand.teal',
+              bg: 'brand.tealSoft'
+            }}
+            onClick={() => inputRef.current?.click()}
+          >
+            {photos.length === 0 ? (
+              <>
+                <Icon as={HiOutlinePhotograph} boxSize={6} color="brand.gray400" mb={1.5} />
+                <Text fontSize="xs" fontWeight="600" color="brand.gray500" textAlign="center" px={2}>
+                  Add Photos
+                </Text>
+              </>
+            ) : (
+              <Icon as={HiOutlinePlus} boxSize={5} color="brand.gray400" />
+            )}
+          </Flex>
+        )}
+      </SimpleGrid>
     </Box>
   )
 }

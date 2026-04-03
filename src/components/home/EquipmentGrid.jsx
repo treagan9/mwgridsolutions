@@ -23,13 +23,13 @@ function EquipmentCard({ icon, title, description, tags }) {
       <Flex
         w={10}
         h={10}
-        bg="rgba(59, 130, 246, 0.1)"
+        bg="rgba(14, 165, 168, 0.1)"
         borderRadius="lg"
         align="center"
         justify="center"
         mb={4}
       >
-        <Icon as={icon} boxSize={5} color="brand.accentLight" />
+        <Icon as={icon} boxSize={5} color="brand.tealLight" />
       </Flex>
       <Heading
         as="h3"

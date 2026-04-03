@@ -1,4 +1,4 @@
-// src/components/ui/SectionHeading.jsx
+// src/components/layout/SectionHeading.jsx
 import { Box, Heading, Text } from '@chakra-ui/react'
 
 function SectionHeading({ label, title, subtitle, dark = false }) {
@@ -10,7 +10,7 @@ function SectionHeading({ label, title, subtitle, dark = false }) {
           fontWeight="700"
           textTransform="uppercase"
           letterSpacing="0.1em"
-          color={dark ? 'brand.accentLight' : 'brand.accent'}
+          color={dark ? 'brand.tealLight' : 'brand.teal'}
           mb={3}
         >
           {label}

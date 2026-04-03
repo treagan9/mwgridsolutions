@@ -10,7 +10,6 @@ function ContactHero() {
       pt={{ base: 28, md: 36 }}
       pb={{ base: 12, md: 16 }}
     >
-      {/* Background image */}
       <Box
         position="absolute"
         inset={0}
@@ -20,14 +19,12 @@ function ContactHero() {
         backgroundRepeat="no-repeat"
       />
 
-      {/* Darker overlay for readability */}
       <Box
         position="absolute"
         inset={0}
         bg="linear-gradient(180deg, rgba(8, 12, 22, 0.88) 0%, rgba(8, 12, 22, 0.92) 100%)"
       />
 
-      {/* Bottom fade */}
       <Box
         position="absolute"
         bottom={0}
@@ -44,7 +41,7 @@ function ContactHero() {
           fontWeight="700"
           textTransform="uppercase"
           letterSpacing="0.1em"
-          color="brand.accentLight"
+          color="brand.tealLight"
           mb={4}
         >
           Get Your Offer
@@ -83,15 +80,15 @@ function ContactHero() {
           color="whiteAlpha.600"
         >
           <HStack>
-            <Icon as={HiClock} color="brand.accentLight" boxSize={4} />
+            <Icon as={HiClock} color="brand.tealLight" boxSize={4} />
             <Text>1 hour response</Text>
           </HStack>
           <HStack>
-            <Icon as={HiPhone} color="brand.accentLight" boxSize={4} />
+            <Icon as={HiPhone} color="brand.tealLight" boxSize={4} />
             <Text>Direct to buyer</Text>
           </HStack>
           <HStack>
-            <Icon as={HiPhotograph} color="brand.accentLight" boxSize={4} />
+            <Icon as={HiPhotograph} color="brand.tealLight" boxSize={4} />
             <Text>Photo upload</Text>
           </HStack>
         </HStack>

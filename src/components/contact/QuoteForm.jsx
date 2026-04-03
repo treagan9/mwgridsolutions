@@ -10,8 +10,13 @@ import {
   Select,
   Textarea,
   Button,
-  Text
+  Text,
+  Heading,
+  Divider,
+  HStack,
+  Icon
 } from '@chakra-ui/react'
+import { HiOutlineShieldCheck } from 'react-icons/hi'
 import toast from 'react-hot-toast'
 import PhotoUploader from './PhotoUploader'
 
@@ -81,93 +86,133 @@ function QuoteForm() {
 
   return (
     <Box py={{ base: 8, md: 14 }} bg="brand.gray50">
-      <Container maxW="680px" px={{ base: 5, md: 8 }}>
+      <Container maxW="720px" px={{ base: 5, md: 8 }}>
         <Box
           bg="white"
           border="1px solid"
           borderColor="brand.gray200"
           borderRadius="2xl"
-          p={{ base: 6, md: 10 }}
-          boxShadow="0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.06)"
+          overflow="hidden"
+          boxShadow="0 1px 3px rgba(0, 0, 0, 0.04), 0 8px 30px rgba(0, 0, 0, 0.06)"
         >
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5} mb={5}>
-            <FormControl isRequired>
-              <FormLabel>Name</FormLabel>
-              <Input
-                name="name"
-                placeholder="Your name"
-                value={form.name}
+          {/* Form header */}
+          <Box px={{ base: 6, md: 10 }} pt={{ base: 6, md: 8 }} pb={0}>
+            <Heading
+              fontFamily="heading"
+              fontSize="lg"
+              fontWeight="700"
+              color="brand.gray900"
+              mb={1}
+            >
+              Equipment Details
+            </Heading>
+            <Text fontSize="sm" color="brand.gray500">
+              The more detail you share, the faster we can get you an offer.
+            </Text>
+          </Box>
+
+          <Divider borderColor="brand.gray100" my={5} />
+
+          {/* Contact info section */}
+          <Box px={{ base: 6, md: 10 }}>
+            <Text fontSize="xs" fontWeight="700" textTransform="uppercase" letterSpacing="0.08em" color="brand.teal" mb={4}>
+              Your Information
+            </Text>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mb={6}>
+              <FormControl isRequired>
+                <FormLabel>Name</FormLabel>
+                <Input
+                  name="name"
+                  placeholder="Full name"
+                  value={form.name}
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Phone</FormLabel>
+                <Input
+                  name="phone"
+                  type="tel"
+                  placeholder="(555) 123-4567"
+                  value={form.phone}
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="you@company.com"
+                  value={form.email}
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Equipment Type</FormLabel>
+                <Select
+                  name="equipment_type"
+                  placeholder="Select type"
+                  value={form.equipment_type}
+                  onChange={handleChange}
+                >
+                  {EQUIPMENT_TYPES.map((type) => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </Select>
+              </FormControl>
+            </SimpleGrid>
+          </Box>
+
+          <Divider borderColor="brand.gray100" />
+
+          {/* Equipment details section */}
+          <Box px={{ base: 6, md: 10 }} py={6}>
+            <Text fontSize="xs" fontWeight="700" textTransform="uppercase" letterSpacing="0.08em" color="brand.teal" mb={4}>
+              Equipment Information
+            </Text>
+            <FormControl mb={5}>
+              <FormLabel>Description</FormLabel>
+              <Textarea
+                name="description"
+                placeholder="Brand, model, kVA/voltage ratings, age, condition, quantity, location..."
+                rows={4}
+                value={form.description}
                 onChange={handleChange}
               />
             </FormControl>
-            <FormControl isRequired>
-              <FormLabel>Phone</FormLabel>
-              <Input
-                name="phone"
-                type="tel"
-                placeholder="(555) 123-4567"
-                value={form.phone}
-                onChange={handleChange}
-              />
+
+            <FormControl>
+              <FormLabel>Photos</FormLabel>
+              <PhotoUploader photos={photos} setPhotos={setPhotos} />
+              <Text fontSize="xs" color="brand.gray400" mt={2}>
+                Nameplate, overall condition, and any damage or details
+              </Text>
             </FormControl>
-          </SimpleGrid>
+          </Box>
 
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5} mb={5}>
-            <FormControl isRequired>
-              <FormLabel>Email</FormLabel>
-              <Input
-                name="email"
-                type="email"
-                placeholder="you@company.com"
-                value={form.email}
-                onChange={handleChange}
-              />
-            </FormControl>
-            <FormControl isRequired>
-              <FormLabel>Equipment Type</FormLabel>
-              <Select
-                name="equipment_type"
-                placeholder="Select type"
-                value={form.equipment_type}
-                onChange={handleChange}
-              >
-                {EQUIPMENT_TYPES.map((type) => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </Select>
-            </FormControl>
-          </SimpleGrid>
+          <Divider borderColor="brand.gray100" />
 
-          <FormControl mb={5}>
-            <FormLabel>Description</FormLabel>
-            <Textarea
-              name="description"
-              placeholder="Brand, model, kVA/voltage ratings, age, condition, quantity, location..."
-              rows={4}
-              value={form.description}
-              onChange={handleChange}
-            />
-          </FormControl>
-
-          <FormControl mb={8}>
-            <FormLabel>Equipment Photos</FormLabel>
-            <PhotoUploader photos={photos} setPhotos={setPhotos} />
-          </FormControl>
-
-          <Button
-            variant="primary"
-            size="lg"
-            w="full"
-            onClick={handleSubmit}
-            isLoading={loading}
-            loadingText="Submitting..."
-          >
-            Submit for Offer
-          </Button>
-
-          <Text fontSize="xs" color="brand.gray400" textAlign="center" mt={4}>
-            We typically respond within one hour during business hours.
-          </Text>
+          {/* Submit section */}
+          <Box px={{ base: 6, md: 10 }} py={{ base: 5, md: 6 }} bg="brand.gray50">
+            <Button
+              variant="primary"
+              size="lg"
+              w="full"
+              onClick={handleSubmit}
+              isLoading={loading}
+              loadingText="Submitting..."
+              mb={3}
+            >
+              Submit for Offer
+            </Button>
+            <HStack justify="center" spacing={1.5}>
+              <Icon as={HiOutlineShieldCheck} boxSize={3.5} color="brand.gray400" />
+              <Text fontSize="xs" color="brand.gray400">
+                We typically respond within one hour during business hours
+              </Text>
+            </HStack>
+          </Box>
         </Box>
       </Container>
     </Box>
