@@ -70,7 +70,7 @@ function clientEmailHtml(data) {
     <!-- Header -->
     <tr>
       <td bgcolor="#0b1120" style="background:#0b1120;padding:32px 24px;text-align:center;">
-        <div style="color:#ffffff;font-size:20px;font-weight:800;letter-spacing:-0.02em;">MW<span style="color:#0ea5a8;">GridSolutions</span></div>
+        <img src="https://powerequipmentbuyers.netlify.app/power-equipment-buyers-sms-logo-1200x630.png" alt="MWGridSolutions" width="280" style="max-width:70%;height:auto;display:block;margin:0 auto;" />
       </td>
     </tr>
 
@@ -192,7 +192,7 @@ function adminEmailHtml(data, photoUrls) {
     <!-- Header -->
     <tr>
       <td bgcolor="#0b1120" style="background:#0b1120;padding:28px 24px;text-align:center;">
-        <div style="color:#ffffff;font-size:18px;font-weight:800;letter-spacing:-0.02em;">MW<span style="color:#0ea5a8;">GridSolutions</span></div>
+        <img src="https://powerequipmentbuyers.netlify.app/power-equipment-buyers-sms-logo-1200x630.png" alt="MWGridSolutions" width="280" style="max-width:70%;height:auto;display:block;margin:0 auto;" />
       </td>
     </tr>
 
