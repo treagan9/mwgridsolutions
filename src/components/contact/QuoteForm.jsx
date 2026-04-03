@@ -1,4 +1,4 @@
-// src/components/forms/QuoteForm.jsx
+// src/components/contact/QuoteForm.jsx
 import { useState } from 'react'
 import {
   Box,
@@ -12,7 +12,6 @@ import {
   Button,
   Text
 } from '@chakra-ui/react'
-import { HiArrowRight } from 'react-icons/hi'
 import toast from 'react-hot-toast'
 import PhotoUploader from './PhotoUploader'
 
@@ -81,7 +80,7 @@ function QuoteForm() {
   }
 
   return (
-    <Box py={{ base: 4, md: 8 }} bg="brand.gray50">
+    <Box py={{ base: 8, md: 14 }} bg="brand.gray50">
       <Container maxW="680px" px={{ base: 5, md: 8 }}>
         <Box
           bg="white"
@@ -151,7 +150,7 @@ function QuoteForm() {
           </FormControl>
 
           <FormControl mb={8}>
-            <FormLabel>Photos</FormLabel>
+            <FormLabel>Equipment Photos</FormLabel>
             <PhotoUploader photos={photos} setPhotos={setPhotos} />
           </FormControl>
 
@@ -159,7 +158,6 @@ function QuoteForm() {
             variant="primary"
             size="lg"
             w="full"
-            
             onClick={handleSubmit}
             isLoading={loading}
             loadingText="Submitting..."

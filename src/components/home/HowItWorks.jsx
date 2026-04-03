@@ -9,7 +9,7 @@ const STEPS = [
   {
     number: '1',
     title: 'Tell Us What You Have',
-    description: 'Fill out our form or give us a call. Share the basics: brand, model, kVA or voltage rating, age, and condition. Photos of the nameplate and overall unit help us move faster.'
+    description: 'Fill out our form or give us a call. Share the basics: brand, model, kVA or voltage rating, age, and condition. Upload photos of the nameplate and overall unit to help us move faster.'
   },
   {
     number: '2',
@@ -19,7 +19,7 @@ const STEPS = [
   {
     number: '3',
     title: 'We Pick Up and Pay',
-    description: 'Once you accept, we handle everything. We coordinate freight with our carrier network, load the equipment at your site, and guarantee fast payment by wire, check, or PayPal.'
+    description: 'Once you accept, we handle everything. We coordinate freight with our carrier network, load the equipment at your site, and guarantee fast payment by wire transfer or check.'
   }
 ]
 
@@ -34,14 +34,13 @@ function HowItWorks() {
         subtitle="No brokers, no back and forth. You talk directly to our buyer and we handle the rest."
       />
 
-      {/* Step connector line (desktop only) */}
       <Box position="relative">
         <Box
           display={{ base: 'none', md: 'block' }}
           position="absolute"
-          top="22px"
-          left="calc(16.66% + 22px)"
-          right="calc(16.66% + 22px)"
+          top="32px"
+          left="calc(16.66% + 32px)"
+          right="calc(16.66% + 32px)"
           h="2px"
           bg="brand.gray200"
           zIndex={0}

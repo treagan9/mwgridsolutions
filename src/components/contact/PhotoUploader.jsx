@@ -1,4 +1,4 @@
-// src/components/forms/PhotoUploader.jsx
+// src/components/contact/PhotoUploader.jsx
 import { useRef } from 'react'
 import {
   Box,
@@ -34,7 +34,6 @@ function PhotoUploader({ photos, setPhotos }) {
         ref={inputRef}
         type="file"
         accept={ACCEPTED}
-        capture="environment"
         multiple
         onChange={handleFiles}
         style={{ display: 'none' }}
@@ -99,7 +98,7 @@ function PhotoUploader({ photos, setPhotos }) {
             Upload equipment photos
           </Text>
           <Text fontSize="xs" color="brand.gray400" mt={1}>
-            Nameplate, condition, details
+            Nameplate, overall condition, details
           </Text>
         </Flex>
       )}
