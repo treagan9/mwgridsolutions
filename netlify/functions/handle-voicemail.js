@@ -14,7 +14,6 @@ export default async function handler(req) {
 
     console.log(`Dial ended with status: ${dialStatus}`)
 
-    // If the call was answered, no voicemail needed
     if (dialStatus === 'completed') {
       const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
@@ -26,17 +25,16 @@ export default async function handler(req) {
       })
     }
 
-    // Not answered: play voicemail greeting and record
     const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Say voice="alice">Thank you for calling MW Grid Solutions. We are unable to take your call right now. Please leave a message with your name, phone number, and a brief description of the equipment you are looking to sell. We will return your call as soon as possible.</Say>
+  <Say voice="Polly.Matthew-Neural">You've reached MW Grid Solutions. Leave your name, number, and what equipment you're looking to sell. We'll get back to you fast.</Say>
   <Record
     maxLength="120"
     playBeep="true"
     recordingStatusCallback="${SITE_URL}/.netlify/functions/handle-recording"
     recordingStatusCallbackMethod="POST"
   />
-  <Say voice="alice">We did not receive a recording. Please call back or visit our website at mwgridsolutions.com. Thank you.</Say>
+  <Say voice="Polly.Matthew-Neural">No message received. Visit mwgridsolutions.com to submit your equipment details online.</Say>
 </Response>`
 
     return new Response(twiml, {

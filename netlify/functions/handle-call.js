@@ -41,7 +41,7 @@ export default async function handler(req) {
     // Fallback TwiML so the caller does not get dead air
     const fallback = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Say voice="alice">Thank you for calling MW Grid Solutions. Please leave a message after the tone and we will return your call shortly.</Say>
+  <Say voice="Polly.Matthew-Neural">You've reached MW Grid Solutions. Leave your name, number, and what equipment you're looking to sell. We'll get back to you fast.</Say>
   <Record
     maxLength="120"
     recordingStatusCallback="${process.env.URL || 'https://powerequipmentbuyers.netlify.app'}/.netlify/functions/handle-recording"
