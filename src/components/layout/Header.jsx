@@ -77,7 +77,7 @@ function Header() {
       transition="all 0.3s"
     >
       <Container maxW="1200px" px={{ base: 5, md: 8 }}>
-        <Flex h={{ base: '72px', md: '80px' }} align="center" justify="space-between">
+        <Flex h={{ base: '76px', md: '88px' }} align="center" justify="space-between">
 
           <Flex
             align="center"
@@ -88,8 +88,8 @@ function Header() {
             <Image
               src="/logo-wide-transparent-background.png"
               alt="MWGridSolutions"
-              h={{ base: '54px', md: '68px' }}
-              maxW={{ base: '160px', md: '220px' }}
+              h={{ base: '58px', md: '76px' }}
+              maxW={{ base: '170px', md: '240px' }}
               objectFit="contain"
               filter={isTransparent ? 'brightness(0) invert(1)' : 'none'}
               transition="filter 0.3s"
