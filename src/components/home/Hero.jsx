@@ -111,7 +111,7 @@ function Hero() {
               _active={{ transform: 'translateY(0)' }}
               transition="all 0.2s"
             >
-              Get Your Offer
+              Request an Offer
             </Button>
             <Button
               variant="unstyled"

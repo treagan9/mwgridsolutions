@@ -140,7 +140,7 @@ function Header() {
                 }
               })}
             >
-              Get an Offer
+              Get Offer
             </Button>
           </HStack>
 
@@ -192,7 +192,7 @@ function Header() {
                 w="full"
                 mt={2}
               >
-                Get an Offer
+                Get Offer
               </Button>
             </VStack>
           </Box>
