@@ -1,5 +1,5 @@
 // src/components/contact/ContactHero.jsx
-import { Box, Container, Heading, Text, HStack, Icon } from '@chakra-ui/react'
+import { Box, Container, Heading, Text, HStack, Icon, Link as ChakraLink } from '@chakra-ui/react'
 import { HiClock, HiPhone, HiPhotograph } from 'react-icons/hi'
 
 function ContactHero() {
@@ -66,11 +66,32 @@ function ContactHero() {
           lineHeight="1.7"
           maxW="480px"
           mx="auto"
-          mb={8}
+          mb={5}
         >
-          Share details and photos below. We typically respond with an offer
-          within one hour during business hours.
+          Fill out the form below or give us a call. We typically respond
+          with an offer within one hour during business hours.
         </Text>
+
+        <ChakraLink
+          href="tel:+18668618383"
+          display="inline-flex"
+          alignItems="center"
+          gap={2}
+          bg="whiteAlpha.100"
+          border="1px solid"
+          borderColor="whiteAlpha.200"
+          borderRadius="full"
+          px={5}
+          py={2}
+          mb={8}
+          _hover={{ bg: 'whiteAlpha.200' }}
+          transition="all 0.15s"
+        >
+          <Icon as={HiPhone} color="brand.tealLight" boxSize={4} />
+          <Text fontSize="sm" fontWeight="700" color="white" fontFamily="mono" letterSpacing="0.02em">
+            (866) 861-8383
+          </Text>
+        </ChakraLink>
 
         <HStack
           spacing={{ base: 4, md: 7 }}

@@ -36,8 +36,7 @@ function Footer() {
       <Container maxW="1200px" px={{ base: 5, md: 8 }} pt={{ base: 12, md: 16 }} pb={8}>
         <SimpleGrid columns={{ base: 1, md: 4 }} spacing={{ base: 10, md: 8 }} mb={12}>
 
-          {/* Brand column */}
-          <VStack align={{ base: 'center', md: 'flex-start' }} spacing={4} gridColumn={{ base: '1', md: 'span 1' }}>
+          <VStack align={{ base: 'center', md: 'flex-start' }} spacing={4}>
             <Image
               src="/logo-wide-transparent-background.png"
               alt="MWGridSolutions"
@@ -55,7 +54,6 @@ function Footer() {
             </Text>
           </VStack>
 
-          {/* Navigation column */}
           <VStack align={{ base: 'center', md: 'flex-start' }} spacing={3}>
             <Text
               fontSize="11px"
@@ -87,7 +85,6 @@ function Footer() {
             ))}
           </VStack>
 
-          {/* Equipment column */}
           <VStack align={{ base: 'center', md: 'flex-start' }} spacing={3}>
             <Text
               fontSize="11px"
@@ -113,7 +110,6 @@ function Footer() {
             ))}
           </VStack>
 
-          {/* Contact column */}
           <VStack align={{ base: 'center', md: 'flex-start' }} spacing={3}>
             <Text
               fontSize="11px"
@@ -125,6 +121,18 @@ function Footer() {
             >
               Contact
             </Text>
+            <ChakraLink
+              href="tel:+18668618383"
+              fontSize="sm"
+              color="brand.gray400"
+              _hover={{ color: 'white' }}
+              display="flex"
+              alignItems="center"
+              gap={2}
+            >
+              <Icon as={HiOutlinePhone} boxSize={4} />
+              (866) 861-8383
+            </ChakraLink>
             <ChakraLink
               href="mailto:info@mwgridsolutions.com"
               fontSize="sm"

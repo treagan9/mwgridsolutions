@@ -9,9 +9,10 @@ import {
   VStack,
   HStack,
   Image,
-  Link as ChakraLink
+  Link as ChakraLink,
+  Text
 } from '@chakra-ui/react'
-import { HiMenu, HiX } from 'react-icons/hi'
+import { HiMenu, HiX, HiPhone } from 'react-icons/hi'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 const NAV_ITEMS = [
@@ -22,6 +23,8 @@ const NAV_ITEMS = [
 ]
 
 const DARK_HERO_PAGES = ['/', '/contact/']
+const PHONE = '(866) 861-8383'
+const PHONE_HREF = 'tel:+18668618383'
 
 function Header() {
   const [scrolled, setScrolled] = useState(false)
@@ -96,7 +99,7 @@ function Header() {
             />
           </Flex>
 
-          <HStack spacing={1} display={{ base: 'none', md: 'flex' }}>
+          <HStack spacing={1} display={{ base: 'none', md: 'flex' }} align="center">
             {visibleItems.map((item) => (
               <ChakraLink
                 key={item.href}
@@ -117,10 +120,33 @@ function Header() {
                 {item.label}
               </ChakraLink>
             ))}
+
+            {/* Phone number */}
+            <ChakraLink
+              href={PHONE_HREF}
+              display="flex"
+              alignItems="center"
+              gap={1.5}
+              px={3}
+              py={2}
+              borderRadius="lg"
+              fontSize="sm"
+              fontWeight="600"
+              color={isTransparent ? 'brand.tealLight' : 'brand.teal'}
+              _hover={{
+                color: isTransparent ? 'white' : 'brand.accent',
+                bg: isTransparent ? 'whiteAlpha.100' : 'brand.gray50'
+              }}
+              transition="all 0.15s"
+            >
+              <HiPhone size={14} />
+              <Text as="span" fontFamily="mono" letterSpacing="0.02em">{PHONE}</Text>
+            </ChakraLink>
+
             <Button
               variant={isTransparent ? 'unstyled' : 'primary'}
               size="sm"
-              ml={2}
+              ml={1}
               onClick={() => navigate('/contact/')}
               px={5}
               {...(isTransparent && {
@@ -144,15 +170,27 @@ function Header() {
             </Button>
           </HStack>
 
-          <IconButton
-            display={{ base: 'flex', md: 'none' }}
-            aria-label="Toggle menu"
-            icon={mobileOpen ? <HiX size={20} /> : <HiMenu size={20} />}
-            variant="ghost"
-            color={isTransparent ? 'white' : 'brand.gray700'}
-            onClick={() => setMobileOpen(!mobileOpen)}
-            _hover={{ bg: isTransparent ? 'whiteAlpha.100' : 'brand.gray50' }}
-          />
+          {/* Mobile: phone icon + menu toggle */}
+          <HStack spacing={2} display={{ base: 'flex', md: 'none' }}>
+            <IconButton
+              as="a"
+              href={PHONE_HREF}
+              aria-label="Call us"
+              icon={<HiPhone size={18} />}
+              variant="ghost"
+              color={isTransparent ? 'brand.tealLight' : 'brand.teal'}
+              _hover={{ bg: isTransparent ? 'whiteAlpha.100' : 'brand.gray50' }}
+              size="sm"
+            />
+            <IconButton
+              aria-label="Toggle menu"
+              icon={mobileOpen ? <HiX size={20} /> : <HiMenu size={20} />}
+              variant="ghost"
+              color={isTransparent ? 'white' : 'brand.gray700'}
+              onClick={() => setMobileOpen(!mobileOpen)}
+              _hover={{ bg: isTransparent ? 'whiteAlpha.100' : 'brand.gray50' }}
+            />
+          </HStack>
         </Flex>
 
         {mobileOpen && (
@@ -185,6 +223,21 @@ function Header() {
                   {item.label}
                 </ChakraLink>
               ))}
+              <ChakraLink
+                href={PHONE_HREF}
+                display="flex"
+                alignItems="center"
+                gap={2}
+                py={2.5}
+                px={4}
+                borderRadius="lg"
+                fontSize="md"
+                fontWeight="600"
+                color={isTransparent ? 'brand.tealLight' : 'brand.teal'}
+              >
+                <HiPhone size={16} />
+                {PHONE}
+              </ChakraLink>
               <Button
                 variant="primary"
                 size="md"
