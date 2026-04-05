@@ -12,7 +12,7 @@ import {
   Divider,
   Icon
 } from '@chakra-ui/react'
-import { HiOutlineMail, HiOutlinePhone } from 'react-icons/hi'
+import { HiOutlineMail, HiOutlinePhone, HiOutlineClock } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
 function Footer() {
@@ -145,6 +145,33 @@ function Footer() {
               <Icon as={HiOutlineMail} boxSize={4} />
               info@mwgridsolutions.com
             </ChakraLink>
+
+            <Divider borderColor="brand.darkBorder" my={1} />
+
+            <Text
+              fontSize="11px"
+              fontWeight="700"
+              textTransform="uppercase"
+              letterSpacing="0.1em"
+              color="brand.tealLight"
+              mb={0}
+            >
+              Business Hours
+            </Text>
+            <VStack align={{ base: 'center', md: 'flex-start' }} spacing={1}>
+              <HStack spacing={2}>
+                <Icon as={HiOutlineClock} boxSize={4} color="brand.gray500" />
+                <Text fontSize="sm" color="brand.gray400">
+                  Mon - Fri: 8:00 AM - 5:00 PM
+                </Text>
+              </HStack>
+              <Text fontSize="sm" color="brand.gray400" pl={{ base: 0, md: 6 }}>
+                Sat: 9:00 AM - 2:00 PM
+              </Text>
+              <Text fontSize="sm" color="brand.gray500" pl={{ base: 0, md: 6 }}>
+                Sun: Closed
+              </Text>
+            </VStack>
           </VStack>
 
         </SimpleGrid>

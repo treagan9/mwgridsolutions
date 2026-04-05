@@ -10,6 +10,12 @@ const RESEND_KEY = process.env.RESEND_API_KEY
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL
 const FROM_EMAIL = 'MWGridSolutions <team@mwgridsolutions.com>'
 
+// All admin recipients - env var + info@ hardcoded, deduped
+const ADMIN_RECIPIENTS = [
+  ADMIN_EMAIL,
+  'info@mwgridsolutions.com'
+].filter((v, i, a) => v && a.indexOf(v) === i)
+
 async function sendEmail(to, subject, html, replyTo) {
   const payload = { from: FROM_EMAIL, to, subject, html }
   if (replyTo) payload.reply_to = replyTo
@@ -145,6 +151,34 @@ function clientEmailHtml(data) {
           </tr>`).join('')}
         </table>
 
+        <!-- Business Hours -->
+        <table width="100%" cellpadding="0" cellspacing="0"
+               style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:24px;">
+          <tr>
+            <td style="padding:14px 16px;border-bottom:1px solid #e2e8f0;">
+              <span style="color:#94a3b8;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Business Hours</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:14px 16px;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:4px 0;color:#64748b;font-size:12px;">Mon - Fri</td>
+                  <td style="padding:4px 0;color:#0f172a;font-size:13px;font-weight:600;text-align:right;">8:00 AM - 5:00 PM</td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 0;color:#64748b;font-size:12px;border-top:1px solid #f1f5f9;">Saturday</td>
+                  <td style="padding:4px 0;color:#0f172a;font-size:13px;font-weight:600;text-align:right;border-top:1px solid #f1f5f9;">9:00 AM - 2:00 PM</td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 0;color:#64748b;font-size:12px;border-top:1px solid #f1f5f9;">Sunday</td>
+                  <td style="padding:4px 0;color:#94a3b8;font-size:13px;text-align:right;border-top:1px solid #f1f5f9;">Closed</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+
         <!-- Contact -->
         <table width="100%" cellpadding="0" cellspacing="0"
                style="background:#0b1120;border-radius:8px;overflow:hidden;">
@@ -156,6 +190,12 @@ function clientEmailHtml(data) {
                   <td style="padding:3px 0;color:#64748b;font-size:12px;">Email</td>
                   <td style="padding:3px 0;text-align:right;">
                     <a href="mailto:info@mwgridsolutions.com" style="color:#0ea5a8;font-size:12px;font-weight:600;text-decoration:none;">info@mwgridsolutions.com</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:3px 0;color:#64748b;font-size:12px;border-top:1px solid rgba(255,255,255,0.06);">Phone</td>
+                  <td style="padding:3px 0;text-align:right;border-top:1px solid rgba(255,255,255,0.06);">
+                    <a href="tel:+18668618383" style="color:#0ea5a8;font-size:12px;font-weight:600;text-decoration:none;">(866) 861-8383</a>
                   </td>
                 </tr>
               </table>
@@ -316,6 +356,29 @@ export default async function handler(req) {
 
   try {
     const formData = await req.formData()
+
+    // Honeypot spam check - reject if hidden field has a value
+    const honeypot = formData.get('website_url')
+    if (honeypot) {
+      // Silently return success so bots think it worked
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+
+    // Timing spam check - reject if submitted too fast (under 3 seconds)
+    const formLoadedAt = formData.get('_loaded')
+    if (formLoadedAt) {
+      const elapsed = Date.now() - parseInt(formLoadedAt, 10)
+      if (elapsed < 3000) {
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        })
+      }
+    }
+
     const name = formData.get('name')
     const email = formData.get('email')
     const phone = formData.get('phone')
@@ -369,13 +432,15 @@ export default async function handler(req) {
     const data = { name, email, phone, equipment_type, description }
 
     await Promise.all([
+      // Client confirmation
       sendEmail(
         email,
         `We Received Your ${equipment_type} Submission`,
         clientEmailHtml(data)
       ),
+      // Admin notification to all recipients
       sendEmail(
-        ADMIN_EMAIL,
+        ADMIN_RECIPIENTS,
         `New Lead: ${equipment_type} from ${name}`,
         adminEmailHtml(data, photoUrls),
         `${name} <${email}>`
