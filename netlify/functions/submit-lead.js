@@ -357,17 +357,16 @@ export default async function handler(req) {
   try {
     const formData = await req.formData()
 
-    // Honeypot spam check - reject if hidden field has a value
+    // Honeypot spam check
     const honeypot = formData.get('website_url')
     if (honeypot) {
-      // Silently return success so bots think it worked
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
     }
 
-    // Timing spam check - reject if submitted too fast (under 3 seconds)
+    // Timing spam check
     const formLoadedAt = formData.get('_loaded')
     if (formLoadedAt) {
       const elapsed = Date.now() - parseInt(formLoadedAt, 10)
@@ -386,31 +385,46 @@ export default async function handler(req) {
     const description = formData.get('description')
     const photoFiles = formData.getAll('photos')
 
+    console.log('Lead received:', { name, email, phone, equipment_type })
+    console.log('Photo files count:', photoFiles.length)
+
     // Upload photos to Supabase storage
     const photoUrls = []
     for (const file of photoFiles) {
-      if (!file || !file.name) continue
-      const timestamp = Date.now()
-      const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
-      const path = `leads/${timestamp}-${safeName}`
-      const buffer = Buffer.from(await file.arrayBuffer())
+      // Skip empty file entries (happens when no photos selected)
+      if (!file || typeof file === 'string' || !file.size || file.size === 0) continue
 
-      const { error: uploadError } = await supabase.storage
-        .from('lead-photos')
-        .upload(path, buffer, {
-          contentType: file.type,
-          upsert: false
-        })
+      try {
+        const timestamp = Date.now()
+        const safeName = (file.name || 'photo.jpg').replace(/[^a-zA-Z0-9.-]/g, '_')
+        const path = `leads/${timestamp}-${safeName}`
+        const arrayBuffer = await file.arrayBuffer()
+        const uint8 = new Uint8Array(arrayBuffer)
 
-      if (!uploadError) {
-        const { data: urlData } = supabase.storage
+        console.log('Uploading:', safeName, 'size:', file.size, 'type:', file.type)
+
+        const { error: uploadError } = await supabase.storage
           .from('lead-photos')
-          .getPublicUrl(path)
-        photoUrls.push(urlData.publicUrl)
-      } else {
-        console.error('Upload error:', uploadError)
+          .upload(path, uint8, {
+            contentType: file.type || 'image/jpeg',
+            upsert: false
+          })
+
+        if (!uploadError) {
+          const { data: urlData } = supabase.storage
+            .from('lead-photos')
+            .getPublicUrl(path)
+          photoUrls.push(urlData.publicUrl)
+          console.log('Uploaded:', path)
+        } else {
+          console.error('Upload error:', uploadError.message)
+        }
+      } catch (uploadErr) {
+        console.error('Photo upload failed:', uploadErr.message)
       }
     }
+
+    console.log('Total photos uploaded:', photoUrls.length)
 
     // Insert lead into database
     const { error: dbError } = await supabase.from('leads').insert({
@@ -424,21 +438,21 @@ export default async function handler(req) {
     })
 
     if (dbError) {
-      console.error('DB error:', dbError)
+      console.error('DB error:', dbError.message)
       return new Response(JSON.stringify({ error: 'Database error' }), { status: 500 })
     }
+
+    console.log('Lead saved to database')
 
     // Send emails
     const data = { name, email, phone, equipment_type, description }
 
     await Promise.all([
-      // Client confirmation
       sendEmail(
         email,
         `We Received Your ${equipment_type} Submission`,
         clientEmailHtml(data)
       ),
-      // Admin notification to all recipients
       sendEmail(
         ADMIN_RECIPIENTS,
         `New Lead: ${equipment_type} from ${name}`,
@@ -447,12 +461,14 @@ export default async function handler(req) {
       )
     ])
 
+    console.log('Emails sent')
+
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     })
   } catch (err) {
-    console.error('Function error:', err)
+    console.error('Function error:', err.message, err.stack)
     return new Response(JSON.stringify({ error: 'Server error' }), { status: 500 })
   }
 }
