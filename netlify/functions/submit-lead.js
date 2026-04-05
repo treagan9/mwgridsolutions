@@ -472,7 +472,3 @@ export default async function handler(req) {
     return new Response(JSON.stringify({ error: 'Server error' }), { status: 500 })
   }
 }
-
-export const config = {
-  path: '/.netlify/functions/submit-lead'
-}
