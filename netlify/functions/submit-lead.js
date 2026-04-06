@@ -108,7 +108,7 @@ const emailShell = (content) => `<!DOCTYPE html>
 
 function clientEmailHtml(data) {
   return emailShell(`
-    <tr><td bgcolor="#0b1120" style="background:#0b1120;padding:32px 24px;text-align:center;"><img src="https://mwgridsolutions.netlify.app/power-equipment-buyers-sms-logo-1200x630.png" alt="MWGridSolutions" width="280" style="max-width:70%;height:auto;display:block;margin:0 auto;" /></td></tr>
+    <tr><td bgcolor="#0b1120" style="background:#0b1120;padding:0;text-align:center;line-height:0;"><img src="https://mwgridsolutions.netlify.app/power-equipment-buyers-sms-logo-1200x630.png" alt="MWGridSolutions" width="600" style="width:100%;max-width:600px;height:auto;display:block;" /></td></tr>
     <tr><td style="background:#f0fdfa;border-bottom:3px solid #0ea5a8;padding:28px 32px;text-align:center;">
       <h1 style="margin:0 0 6px 0;color:#0f172a;font-size:22px;font-weight:800;line-height:1.2;">We Received Your Submission</h1>
       <p style="margin:0;color:#64748b;font-size:14px;line-height:1.6;">Thank you, ${data.name.split(' ')[0]}. Our buyer will review your equipment and respond with an offer.</p>
@@ -164,7 +164,7 @@ function adminEmailHtml(data, photoUrls) {
     : '<p style="color:#94a3b8;font-size:13px;margin:0;">No description provided</p>'
 
   return emailShell(`
-    <tr><td bgcolor="#0b1120" style="background:#0b1120;padding:28px 24px;text-align:center;"><img src="https://mwgridsolutions.netlify.app/power-equipment-buyers-sms-logo-1200x630.png" alt="MWGridSolutions" width="280" style="max-width:70%;height:auto;display:block;margin:0 auto;" /></td></tr>
+    <tr><td bgcolor="#0b1120" style="background:#0b1120;padding:0;text-align:center;line-height:0;"><img src="https://mwgridsolutions.netlify.app/power-equipment-buyers-sms-logo-1200x630.png" alt="MWGridSolutions" width="600" style="width:100%;max-width:600px;height:auto;display:block;" /></td></tr>
     <tr><td style="background:#f0fdfa;border-bottom:3px solid #0ea5a8;padding:20px 32px;">
       <table width="100%" cellpadding="0" cellspacing="0"><tr>
         <td><div style="color:#0ea5a8;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;">New Lead</div><div style="color:#0f172a;font-size:20px;font-weight:800;line-height:1.2;">${data.equipment_type}</div><div style="color:#94a3b8;font-size:11px;margin-top:4px;">${getMST()}</div></td>
