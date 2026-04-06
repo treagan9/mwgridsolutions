@@ -1,9 +1,10 @@
 [build]
-  command = "yarn build"
+  command = "cd netlify/functions && npm install && cd ../.. && yarn build"
   publish = "dist"
 
 [functions]
   directory = "netlify/functions"
+  node_bundler = "esbuild"
 
 [[redirects]]
   from = "/*"

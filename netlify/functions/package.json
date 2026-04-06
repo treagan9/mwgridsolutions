@@ -1,6 +1,12 @@
 {
+  "name": "mwgridsolutions-functions",
+  "version": "1.0.0",
+  "type": "module",
   "dependencies": {
     "@supabase/supabase-js": "^2.90.1",
     "busboy": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
