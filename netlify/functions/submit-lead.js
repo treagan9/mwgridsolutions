@@ -2,7 +2,7 @@
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
+  process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 )
 
@@ -391,7 +391,6 @@ export default async function handler(req) {
     // Upload photos to Supabase storage
     const photoUrls = []
     for (const file of photoFiles) {
-      // Skip empty file entries (happens when no photos selected)
       if (!file || typeof file === 'string' || !file.size || file.size === 0) continue
 
       try {
