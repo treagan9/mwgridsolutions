@@ -3,26 +3,23 @@
 
 const SITE_URL = process.env.URL || 'https://mwgridsolutions.netlify.app'
 
-export default async function handler(req) {
-  if (req.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 })
+exports.handler = async (event) => {
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method not allowed' }
   }
 
   try {
-    const formData = await req.formData()
-    const dialStatus = formData.get('DialCallStatus')
+    const params = new URLSearchParams(event.body)
+    const dialStatus = params.get('DialCallStatus')
 
     console.log(`Dial ended with status: ${dialStatus}`)
 
     if (dialStatus === 'completed') {
-      const twiml = `<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-  <Hangup/>
-</Response>`
-      return new Response(twiml, {
-        status: 200,
-        headers: { 'Content-Type': 'text/xml' }
-      })
+      return {
+        statusCode: 200,
+        headers: { 'Content-Type': 'text/xml' },
+        body: `<?xml version="1.0" encoding="UTF-8"?><Response><Hangup/></Response>`
+      }
     }
 
     const twiml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -37,21 +34,17 @@ export default async function handler(req) {
   <Say voice="Polly.Matthew-Neural">No message received. Visit mwgridsolutions.com to submit your equipment details online.</Say>
 </Response>`
 
-    return new Response(twiml, {
-      status: 200,
-      headers: { 'Content-Type': 'text/xml' }
-    })
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'text/xml' },
+      body: twiml
+    }
   } catch (err) {
     console.error('handle-voicemail error:', err)
-    const fallback = `<?xml version="1.0" encoding="UTF-8"?>
-<Response><Hangup/></Response>`
-    return new Response(fallback, {
-      status: 200,
-      headers: { 'Content-Type': 'text/xml' }
-    })
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'text/xml' },
+      body: `<?xml version="1.0" encoding="UTF-8"?><Response><Hangup/></Response>`
+    }
   }
-}
-
-export const config = {
-  path: '/.netlify/functions/handle-voicemail'
 }

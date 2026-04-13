@@ -1,10 +1,10 @@
 // netlify/functions/handle-recording.js
 // Twilio recording callback > Deepgram transcription > Supabase lead > admin email
 
-import { createClient } from '@supabase/supabase-js'
+const { createClient } = require('@supabase/supabase-js')
 
 const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
+  process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 )
 
@@ -21,11 +21,9 @@ const getMST = () => new Date().toLocaleString('en-US', {
 }) + ' MST'
 
 async function transcribeRecording(recordingUrl) {
-  // Twilio recordings need auth to access
   const audioUrl = `${recordingUrl}.mp3`
   const authedUrl = audioUrl.replace('https://', `https://${TWILIO_SID}:${TWILIO_TOKEN}@`)
 
-  // Fetch the audio file
   const audioRes = await fetch(authedUrl)
   if (!audioRes.ok) {
     console.error('Failed to fetch recording:', audioRes.status)
@@ -33,7 +31,6 @@ async function transcribeRecording(recordingUrl) {
   }
   const audioBuffer = await audioRes.arrayBuffer()
 
-  // Send to Deepgram for transcription + summarization
   const dgRes = await fetch('https://api.deepgram.com/v1/listen?model=nova-2&smart_format=true&summarize=v2&detect_language=true', {
     method: 'POST',
     headers: {
@@ -44,13 +41,11 @@ async function transcribeRecording(recordingUrl) {
   })
 
   if (!dgRes.ok) {
-    const errText = await dgRes.text()
-    console.error('Deepgram error:', errText)
+    console.error('Deepgram error:', await dgRes.text())
     return { transcript: '', summary: '' }
   }
 
   const dgData = await dgRes.json()
-
   const transcript = dgData.results?.channels?.[0]?.alternatives?.[0]?.transcript || ''
   const summary = dgData.results?.summary?.short || ''
 
@@ -61,12 +56,11 @@ async function transcribeRecording(recordingUrl) {
 }
 
 async function getCallerInfo(callSid) {
-  // Fetch call details from Twilio for caller location
   try {
     const url = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_SID}/Calls/${callSid}.json`
     const res = await fetch(url, {
       headers: {
-        Authorization: 'Basic ' + btoa(`${TWILIO_SID}:${TWILIO_TOKEN}`)
+        Authorization: 'Basic ' + Buffer.from(`${TWILIO_SID}:${TWILIO_TOKEN}`).toString('base64')
       }
     })
     if (res.ok) {
@@ -107,14 +101,12 @@ function adminCallEmailHtml(data) {
       <td align="center">
         <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
 
-          <!-- Header -->
           <tr>
             <td bgcolor="#0b1120" style="background:#0b1120;padding:28px 24px;text-align:center;">
               <img src="https://mwgridsolutions.netlify.app/power-equipment-buyers-sms-logo-1200x630.png" alt="MWGridSolutions" width="280" style="max-width:70%;height:auto;display:block;margin:0 auto;" />
             </td>
           </tr>
 
-          <!-- Alert banner -->
           <tr>
             <td style="background:${isVoicemail ? '#fef3c7' : '#f0fdfa'};border-bottom:3px solid ${isVoicemail ? '#f59e0b' : '#0ea5a8'};padding:20px 32px;">
               <table width="100%" cellpadding="0" cellspacing="0">
@@ -136,11 +128,9 @@ function adminCallEmailHtml(data) {
             </td>
           </tr>
 
-          <!-- Body -->
           <tr>
             <td class="mobile-pad" style="padding:28px 40px;">
 
-              <!-- Call details -->
               <table width="100%" cellpadding="0" cellspacing="0"
                      style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:24px;">
                 <tr>
@@ -160,7 +150,7 @@ function adminCallEmailHtml(data) {
                       ${data.caller_city ? `
                       <tr>
                         <td style="padding:5px 0;color:#64748b;font-size:12px;border-top:1px solid #f1f5f9;">Location</td>
-                        <td style="padding:5px 0;color:#0f172a;font-size:13px;text-align:right;border-top:1px solid #f1f5f9;">${data.caller_city}${data.caller_state ? ', ' + data.caller_state : ''}</td>
+                        <td style="padding:5px 0;color:#0f172a;font-size:13px;text-align:right;border-top:1px solid #f1f5f9;">${data.caller_city}</td>
                       </tr>` : ''}
                       <tr>
                         <td style="padding:5px 0;color:#64748b;font-size:12px;border-top:1px solid #f1f5f9;">Duration</td>
@@ -178,7 +168,6 @@ function adminCallEmailHtml(data) {
               </table>
 
               ${data.summary ? `
-              <!-- AI Summary -->
               <p style="margin:0 0 10px 0;color:#94a3b8;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">AI Summary</p>
               <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
                 <tr>
@@ -189,7 +178,6 @@ function adminCallEmailHtml(data) {
               </table>` : ''}
 
               ${data.transcript ? `
-              <!-- Transcript -->
               <p style="margin:0 0 10px 0;color:#94a3b8;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Full Transcript</p>
               <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
                 <tr>
@@ -200,7 +188,6 @@ function adminCallEmailHtml(data) {
               </table>` : ''}
 
               ${data.recording_url ? `
-              <!-- Recording link -->
               <p style="margin:0 0 10px 0;color:#94a3b8;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Recording</p>
               <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
                 <tr>
@@ -210,7 +197,6 @@ function adminCallEmailHtml(data) {
                 </tr>
               </table>` : ''}
 
-              <!-- Action buttons -->
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="text-align:center;padding-top:8px;">
@@ -229,7 +215,6 @@ function adminCallEmailHtml(data) {
             </td>
           </tr>
 
-          <!-- Footer -->
           <tr>
             <td style="padding:14px 40px;background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center;">
               <p style="margin:0;color:#94a3b8;font-size:11px;">MWGridSolutions Call Tracking &middot; ${getMST()}</p>
@@ -244,36 +229,30 @@ function adminCallEmailHtml(data) {
 </html>`
 }
 
-export default async function handler(req) {
-  if (req.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 })
+exports.handler = async (event) => {
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method not allowed' }
   }
 
   try {
-    const formData = await req.formData()
-    const recordingUrl = formData.get('RecordingUrl')
-    const recordingSid = formData.get('RecordingSid')
-    const callSid = formData.get('CallSid')
-    const recordingStatus = formData.get('RecordingStatus')
-    const recordingDuration = formData.get('RecordingDuration')
+    const params = new URLSearchParams(event.body)
+    const recordingUrl = params.get('RecordingUrl')
+    const recordingSid = params.get('RecordingSid')
+    const callSid = params.get('CallSid')
+    const recordingStatus = params.get('RecordingStatus')
+    const recordingDuration = params.get('RecordingDuration')
 
     console.log(`Recording callback: ${recordingSid}, status: ${recordingStatus}, duration: ${recordingDuration}s`)
 
-    // Only process completed recordings
     if (recordingStatus !== 'completed') {
-      return new Response(JSON.stringify({ skipped: true }), { status: 200 })
+      return { statusCode: 200, body: 'skipped' }
     }
 
-    // Get caller info from Twilio
     const callerInfo = await getCallerInfo(callSid)
-    const callerPhone = callerInfo.from || formData.get('From') || 'Unknown'
+    const callerPhone = callerInfo.from || params.get('From') || 'Unknown'
     const duration = parseInt(recordingDuration) || callerInfo.duration || 0
+    const isVoicemail = callerInfo.status !== 'completed'
 
-    // Determine if voicemail (short calls that were not answered are usually voicemails)
-    // We check if the recording came from a Record verb vs Dial record
-    const isVoicemail = duration < 120 && callerInfo.status !== 'completed'
-
-    // Transcribe with Deepgram
     let transcript = ''
     let summary = ''
     if (recordingUrl) {
@@ -282,7 +261,6 @@ export default async function handler(req) {
       summary = result.summary
     }
 
-    // Insert into Supabase
     const { error: dbError } = await supabase.from('call_leads').insert({
       caller_phone: callerPhone,
       caller_city: callerInfo.callerCity || null,
@@ -298,16 +276,12 @@ export default async function handler(req) {
       status: 'new'
     })
 
-    if (dbError) {
-      console.error('DB error:', dbError)
-    }
+    if (dbError) console.error('DB error:', dbError)
 
-    // Send admin notification email
     if (RESEND_KEY && ADMIN_EMAIL) {
       const emailData = {
         caller_phone: callerPhone,
         caller_city: callerInfo.callerCity,
-        caller_state: null,
         call_duration: duration,
         voicemail: isVoicemail,
         transcript,
@@ -333,23 +307,13 @@ export default async function handler(req) {
         })
       })
 
-      if (!res.ok) {
-        console.error('Email error:', await res.text())
-      } else {
-        console.log('Admin call notification sent')
-      }
+      if (!res.ok) console.error('Email error:', await res.text())
+      else console.log('Admin notification sent')
     }
 
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    })
+    return { statusCode: 200, body: 'OK' }
   } catch (err) {
     console.error('handle-recording error:', err)
-    return new Response(JSON.stringify({ error: 'Server error' }), { status: 500 })
+    return { statusCode: 500, body: 'Server error' }
   }
-}
-
-export const config = {
-  path: '/.netlify/functions/handle-recording'
 }
